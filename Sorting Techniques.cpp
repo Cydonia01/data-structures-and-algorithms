@@ -2,6 +2,12 @@
 
 using namespace std;
 
+class Node {
+public:
+	int data;
+	Node *next;
+};
+
 void swap(int *x, int *y) {
 	int temp = *x;
 	*x = *y;
@@ -122,10 +128,82 @@ void RMergeSort(int A[], int l, int h) {
 	}
 }
 
-int main() {
-	int A[] = {6,2,3,7,14,5,12,4,1};
+int findMax(int A[], int size) {
+	int max = INT_MIN;
+	int i;
+	for (i = 0; i < size; i++) {
+		if (A[i] > max)
+			max = A[i];
+	}
+	return max;
+}
 
-	RMergeSort(A, 0, sizeof(A) / 4 - 1);
-	for (int i = 0; i < sizeof(A)/4; i++) cout<<A[i]<<" ";
+void CountSort(int A[], int size) {
+	int max, i, j, *C;
+	max = findMax(A, size);
+	C = new int[max + 1];
+	
+	
+	for (i = 0; i < max + 1; i++)
+		C[i] = 0;
+	
+	for (i = 0; i < size; i++)
+		C[A[i]]++;
+	
+	i = j = 0;
+	
+	while (i < max + 1) {
+		if (C[i] > 0) {
+			A[j++] = i;
+			C[i]--;
+		}
+		else
+			i++;
+	}
+}
+
+/*void BucketSort(int A[], int size) {
+	int max, i, j;
+	Node* *Bins;
+	max = findMax(A, size);
+	Bins = new Node*[max + 1];
+	
+	for (i = 0; i < max + 1; i++)
+		Bins[i] = NULL;
+		
+	for (i = 0; i < size; i++)
+		Insert(Bins[A[i]], A[i]);
+	
+	i = 0; j = 0;
+	
+	cout<<Bins[3]->data;
+	
+	while (i < max + 1) {
+		while (Bins[i] != NULL)
+			A[j++] = Delete(Bins[i]);
+		i++;
+	}
+	
+}*/
+
+void ShellSort(int A[], int size) {
+	int gap, i, j, temp;
+	for (gap = size / 2; gap >= 1; gap /= 2) {
+		for (i = gap; i < size; i++) {
+			temp = A[i];
+			j = i - gap;
+			while (j >= 0 && A[j] > temp) {
+				A[j + gap] = A[j];
+				j = j - gap;
+			}
+			A[j + gap] = temp;
+		}
+	}
+}
+
+int main() {
+	int A[] = {6,2,3,7,14,5,12,4,1,13};
+	ShellSort(A, 10);
+	for (int i = 0; i < sizeof(A) / sizeof(int); i++) cout<<A[i]<<" ";
 	return 0;
 }
