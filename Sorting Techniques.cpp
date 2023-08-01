@@ -8,7 +8,7 @@ void swap(int *x, int *y) {
 	*y = temp;
 }
 
-void Bubble(int A[], int n) {
+void BubbleSort(int A[], int n) {
 	int flag;
 	for (int i = 0; i < n - 1; i++) {
 		flag = 0;
@@ -22,7 +22,7 @@ void Bubble(int A[], int n) {
 	}
 }
 
-void Insertion(int A[], int n) {
+void InsertionSort(int A[], int n) {
 	int temp;
 	int i, j, x;
 	
@@ -37,7 +37,7 @@ void Insertion(int A[], int n) {
 	}
 }
 
-void Selection(int A[], int n) {
+void SelectionSort(int A[], int n) {
 	int i, j, k;
 	for (i = 0; i < n - 1; i++) {
 		k = i;
@@ -64,20 +64,68 @@ int Partition(int A[], int l, int h) {
 	return j;
 }
 
-void Quick(int A[], int l, int h) {
+void QuickSort(int A[], int l, int h) {
 	int j;
 	
 	if (l < h) {
 		j = Partition(A, l, h);
-		Quick(A, l, j);
-		Quick(A, j + 1, h);
+		QuickSort(A, l, j);
+		QuickSort(A, j + 1, h);
+	}
+}
+
+int* Merge(int A[], int l, int mid, int h) {
+	int B[h + 1];
+	int i, j, k;
+	i = l;
+	j = mid + 1;
+	k = l;
+	while (i <= mid && j <= h) {
+		if (A[i] < A[j])
+			B[k++] = A[i++];
+		else
+			B[k++] = A[j++];
+	}
+	
+	for (; i <= mid; i++)
+		B[k++] = A[i];
+	
+	for (; j <= h; j++)
+		B[k++] = A[j];
+	
+	for (i = l; i <= h; i++)
+		A[i] = B[i];
+}
+
+void IMergeSort(int A[], int n) {
+	int p, i, l, mid, h;
+	
+	for (p = 2; p <= n; p = p * 2) {
+		for (i = 0; i + p - 1 < n; i = i + p) {
+			l = i;
+			h = i + p - 1;
+			mid = (l + h) / 2;
+			Merge(A, l, mid, h);
+		}
+	}
+	if (p / 2 < n)
+		Merge(A, 0, p / 2 - 1, n - 1); 
+}
+
+void RMergeSort(int A[], int l, int h) {
+	int mid;
+	if (l < h) {
+		mid = (l + h) / 2;
+		RMergeSort(A, l, mid);
+		RMergeSort(A, mid + 1, h);
+		Merge(A, l, mid, h);
 	}
 }
 
 int main() {
-	int A[] = {6,2,3,7,14,5,12,4,11,INT_MAX};
+	int A[] = {6,2,3,7,14,5,12,4,1};
 
-	Quick(A, 0, sizeof(A)/4 - 1);
-	for (int i = 0; i < sizeof(A)/4 - 1; i++) cout<<A[i]<<" ";
+	RMergeSort(A, 0, sizeof(A) / 4 - 1);
+	for (int i = 0; i < sizeof(A)/4; i++) cout<<A[i]<<" ";
 	return 0;
 }
