@@ -162,7 +162,29 @@ void CountSort(int A[], int size) {
 	}
 }
 
-/*void BucketSort(int A[], int size) {
+int Delete(Node* &p) {
+	Node *q;
+	q = p;
+	int x;
+	x = p->data;
+	p = p->next;
+	delete q;
+	return x;
+}
+
+void Insert(Node* &p, int x) {
+	Node *t;
+	t = new Node;
+	t->data = x;
+	t->next = NULL;
+	
+	if (p != NULL)
+		t->next = p;
+		
+	p = t;
+}
+
+void BucketSort(int A[], int size) {
 	int max, i, j;
 	Node* *Bins;
 	max = findMax(A, size);
@@ -176,15 +198,12 @@ void CountSort(int A[], int size) {
 	
 	i = 0; j = 0;
 	
-	cout<<Bins[3]->data;
-	
 	while (i < max + 1) {
 		while (Bins[i] != NULL)
 			A[j++] = Delete(Bins[i]);
 		i++;
 	}
-	
-}*/
+}
 
 void ShellSort(int A[], int size) {
 	int gap, i, j, temp;
@@ -203,7 +222,7 @@ void ShellSort(int A[], int size) {
 
 int main() {
 	int A[] = {6,2,3,7,14,5,12,4,1,13};
-	ShellSort(A, 10);
+	BucketSort(A, 10);
 	for (int i = 0; i < sizeof(A) / sizeof(int); i++) cout<<A[i]<<" ";
 	return 0;
 }
