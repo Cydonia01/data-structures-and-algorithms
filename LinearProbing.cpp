@@ -38,7 +38,7 @@ public:
 	}
 	
 	int hashing(int key, int i) {
-		return (key + i) % 10;
+		return (key + i) % size;
 	}
 	
 	void Insert(int key) {
@@ -83,10 +83,29 @@ int main() {
 	lp.Display();
 	cout<<"What number do you seek? ";
 	cin>>x;
-	if(lp.Search(x))
-		cout<<x<<" is found.";
-	else
-		cout<<x<<" is not found.";
-
+	cout<<x;
+	lp.Search(x) ? cout<<" is found.":cout<<" is not found.";
+	cout<<endl<<endl;
+	
+	// Sample 2:
+	LinearProbing lp2(20);
+	lp2.Insert(15);
+	lp2.Insert(23);
+	lp2.Insert(54);
+	lp2.Insert(86);
+	lp2.Insert(59);
+	lp2.Insert(111);
+	lp2.Insert(35);
+	lp2.Insert(21);
+	lp2.Insert(60);
+	lp2.Insert(39);
+	lp2.Insert(79);
+	
+	lp2.Display();
+	cout<<"What number do you seek? ";
+	cin>>x;
+	cout<<x;
+	lp2.Search(x) ? cout<<" is found.":cout<<" is not found.";
+	
 	return 0;
 }
