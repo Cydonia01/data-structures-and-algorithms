@@ -1,14 +1,9 @@
 #include<iostream>
+#include "Node.h"
 #ifndef Queue_h
 #define Queue_h
 
 using namespace std;
-
-class Node {
-public:
-	int data;
-	Node *next;
-};
 
 class Queue {
 private:
