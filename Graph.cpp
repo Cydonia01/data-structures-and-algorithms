@@ -4,8 +4,11 @@
 
 using namespace std;
 
-int visited[] = {0};
+// Global visited array for DFS and DFSAL methods.
+int visited[7] = {0};
 
+
+// Breadth-first search and Depth-first search methods for adjacency matrices.
 void BFS(int G[][7], int start, int n) {
 	int i = start;
 	Queue q;
@@ -28,7 +31,6 @@ void BFS(int G[][7], int start, int n) {
 }
 
 void DFS(int G[][7], int start, int n) {
-	static int visited[7] = {0};
 	if (visited[start] == 0) {
 		cout<<start<<" ";
 		visited[start] = 1;
@@ -39,32 +41,34 @@ void DFS(int G[][7], int start, int n) {
 	}
 }
 
-void BFSAL(LinkedList *GL, int start) {
+// Breadth-first search and Depth-first search methods for adjacency lists.
+void BFSAL(LinkedList *GL, int n) {
 	Node* p;
-	Queue q;
-	p = GL[start].getHead();
 	int visited[6] = {0};
-	while (p != NULL) {
-		cout<<p->data<<" ";
-		visited[p->data] = 1;
-		q.enqueue(p->data);
-		if (p->next)
-			p = p->next;
-		else
-			p = GL[p->data].getHead();
-	}
-}
-
-void DFSAL(LinkedList *GL, Node *p) {
-	static int visited[6] = {0};
-	if (visited[p->data] == 0) {
+	for (int i = 1; i < n; i++) {
+		if (visited[i] == 0) {
+			cout<<i<<" ";
+			visited[i] = 1;
+		}
+		p = GL[i].getHead();
 		while (p != NULL && visited[p->data] == 0) {
 			cout<<p->data<<" ";
 			visited[p->data] = 1;
 			if (p->next)
 				p = p->next;
-			else
-				DFSAL(GL, GL[p->data].getHead());
+		}
+	}
+}
+
+void DFSAL(LinkedList *GL, int start) {
+	Node *p = GL[start].getHead();
+	if (visited[start] == 0) {
+		cout<<start<<" ";
+		visited[start] = 1;
+		while (p != NULL) {
+			if (visited[p->data] == 0)
+				DFSAL(GL, p->data);
+			else p = p->next;
 		}
 	}
 }
@@ -73,9 +77,9 @@ int main() {
 	//index starts with '1' in all programs. Node class header file is in LinkedList and Queue header files.
 	
 	// Undirected graph BFS and DFS sample.
-	
 	// using adjacency matrix.
-
+	cout<<"Undirected graph adjacency matrix:"<<endl;
+	
 	int G[7][7] = {{0,0,0,0,0,0,0},
 	               {0,0,1,1,0,0,0},
 				   {0,1,0,0,1,0,0},
@@ -88,10 +92,11 @@ int main() {
 	cout<<endl;
 	
 	DFS(G, 1, 7);
-	cout<<endl;
+	cout<<endl<<endl;
 	
 	// using adjacency list.
-
+	cout<<"Undirected Graph adjacency list: "<<endl;
+	
 	LinkedList *GL = new LinkedList[6];
 	GL[1].append(2);GL[1].append(3);GL[1].append(4);
 	GL[2].append(1);GL[2].append(3);
@@ -99,10 +104,56 @@ int main() {
 	GL[4].append(1);GL[4].append(3);GL[4].append(5);
 	GL[5].append(3);GL[5].append(4);
 	
-	BFSAL(GL, 1);
+	BFSAL(GL, 6);
 	cout<<endl;
 	
-	DFSAL(GL, GL[1].getHead());
+	// resetting global visited array for DFSAL.
+	for (int i = 0; i < 7; i++)
+		visited[i] = 0;
+	
+	DFSAL(GL, 2);
+	cout<<endl<<endl;
+	
+	
+	// Directed graph BFS and DFS example.
+	// using adjacency matrix.
+	cout<<"Directed Graph adjacency matrix: "<<endl;
+		
+	int DG[7][7] = {{0,0,0,0,0,0,0},
+					{0,0,1,1,0,0,0},
+					{0,0,0,0,1,0,0},
+					{0,0,1,0,1,1,0},
+					{0,0,0,0,0,1,1},
+					{0,0,0,0,0,0,1},
+					{0,0,0,0,0,0,0}};
+					
+	BFS(DG, 1, 7);
 	cout<<endl;
+	
+	// resetting global visited array for DFS.
+	for (int i = 0; i < 7; i++)
+		visited[i] = 0;
+	
+	DFS(DG, 1, 7);
+	cout<<endl<<endl;
+	
+	// using adjacency list.
+	cout<<"Directed Graph adjacency list: "<<endl;
+
+	LinkedList *DGL = new LinkedList[6];
+	DGL[1].append(2);DGL[1].append(3);
+	DGL[2].append(5);
+	DGL[3].append(4);
+	DGL[4].append(2);
+	
+	BFSAL(DGL, 6);
+	cout<<endl;
+		
+	// resetting global visited array for DFSAL.
+	for (int i = 0; i < 7; i++)
+		visited[i] = 0;
+		
+	DFSAL(DGL, 1);
+	
 	return 0;
 }
