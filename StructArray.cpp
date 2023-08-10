@@ -1,7 +1,8 @@
 #include <iostream>
-#include <stdlib.h>
 
 using namespace std;
+
+/* This program implements some algorithms using arrays and C structs. */
 
 struct Array {
 	int A[11];
@@ -45,10 +46,13 @@ int multipleMissingElements(struct Array arr) {
 }
 
 int main() {
-
-	struct Array arr = { {6,7,8,9,11,12,15,16,17,18,19}, 11, 11 };
-
-	multipleMissingElements(arr);
-
+	
+	struct Array arr = {{1,2,3,4,5,6,7,8,10,11,12}, 11, 11};
+	cout<<"Missing element is "<<missingElement(arr)<<endl<<endl;
+	
+	struct Array arr2 = { {6,7,8,9,11,12,15,16,17,18,19}, 11, 11 };
+	cout<<"Missing elements are "<<endl;
+	multipleMissingElements(arr2);
+	
 	return 0;
 }
