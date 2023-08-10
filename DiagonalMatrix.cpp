@@ -1,5 +1,4 @@
 #include<iostream>
-#include<stdlib.h>
 
 using namespace std;
 
@@ -48,6 +47,7 @@ void Diagonal::Display() {
 }
 
 int main() {
+	//indexes start with 1.
 	
 	Diagonal *d = new Diagonal(4);
 	d->Set(1,1,5);

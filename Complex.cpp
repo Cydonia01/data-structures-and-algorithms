@@ -1,7 +1,8 @@
 #include<iostream>
-#include<stdlib.h>
 
 using namespace std;
+
+/* this file is an exercise of 'operator' keyword. */
 
 class Complex {
 private:
@@ -16,7 +17,7 @@ public:
 };
 
 istream & operator>>(istream &is, Complex &c) {
-	cout<<"Enter real and imaginary number: \n";
+	cout<<"Enter real and imaginary number: ";
 	cin>>c.real>>c.img;
 	return is;
 }	

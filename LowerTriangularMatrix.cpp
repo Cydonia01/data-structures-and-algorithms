@@ -1,5 +1,4 @@
 #include<iostream>
-#include<stdlib.h>
 
 using namespace std;
 
@@ -10,12 +9,12 @@ private:
 public:
 	LTMatrix() {
 		n = 2;
-		A = new int[2*(2+1)/2];
+		A = new int[2 * (2 + 1) / 2];
 	}
 	
 	LTMatrix(int n) {
 		this->n = n;
-		A = new int[n*(n+1)/2];
+		A = new int[n * (n + 1) / 2];
 	}
 	
 	~LTMatrix() {
@@ -29,21 +28,21 @@ public:
 };
 
 void LTMatrix::Set(int i, int j, int x) {
-	int index = i * (i - 1)/2 + j - 1;
+	int index = i * (i - 1) / 2 + j - 1;
 	if (i >= j) A[index] = x;
 }
 
 int LTMatrix::Get(int i, int j) {
-	int index = i * (i - 1)/2 + j - 1;
+	int index = i * (i - 1) / 2 + j - 1;
 	if (i >= j) return A[index];
 	else return 0;
 }
 
 void LTMatrix::Display() {
-	int index,i,j;
+	int index, i, j;
 	for (i = 1; i <= n; i++) {
 		for (j = 1; j <= n; j++) {
-			index = i * (i - 1)/2 + j - 1;
+			index = i * (i - 1) / 2 + j - 1;
 			if (i >= j) cout<<A[index]<<" ";
 			else cout<<"0 ";
 		}
@@ -52,15 +51,14 @@ void LTMatrix::Display() {
 }
 
 int main() {
-	int d;
-	cout<<"Enter Dimensions"<<endl;
+	int d, x;
+	cout<<"Enter Dimensions: ";
 	cin>>d;
 	LTMatrix lm(d);
-	int x;
-	cout<<"Enter All Elements"<<endl;
+	cout<<"Enter All Elements:"<<endl;
 	
 	for (int i = 1; i <= d; i++) {
-		for (int j = 1; j <= d; j++) {
+		for (int j = 1; j <= i; j++) {
 			cin>>x;
 			lm.Set(i, j, x);
 		}

@@ -1,8 +1,6 @@
 #include <iostream>
-#include <stdlib.h>
 
 using namespace std;
-
 
 class Array {
 	private:
@@ -25,16 +23,15 @@ class Array {
 		}
 
 		~Array() {
-			delete[]A;
+			delete []A;
 		}
 
 		void Display();
 		void Append(int x);
 		void Insert(int index, int x);
 		int Delete(int index);
-		int LinearSearch(int key);
+		int ImprovedLinearSearch(int key);
 		int BinarySearch(int key);
-		//int RBinSearch(int a[], int l, int h, int key);
 		int Get(int index);
 		void Set(int index, int x);
 		int Max();
@@ -53,7 +50,7 @@ class Array {
 
 };
 
-void Array::swap(int* x, int* y) {
+void Array::swap(int *x, int *y) {
 	int temp;
 	temp = *x;
 	*x = *y;
@@ -75,6 +72,7 @@ void Array::Insert(int index, int x) {
 	if (index >= 0 && index <= length) {
 		for (int i = length; i > index; i--)
 			A[i] = A[i - 1];
+			
 		A[index] = x;
 		length++;
 	}
@@ -84,14 +82,16 @@ int Array::Delete(int index) {
 	int x = 0;
 	if (index >= 0 && index < length) {
 		x = A[index];
+		
 		for (int i = index; i < length - 1; i++)
 			A[i] = A[i + 1];
+			
 		length--;
 	}
 	return x;
 }
 
-int Array::LinearSearch(int key) {
+int Array::ImprovedLinearSearch(int key) {
 	for (int i = 0; i < length; i++) {
 		if (key == A[i]) {
 			swap(&A[i], &A[0]);
@@ -103,6 +103,7 @@ int Array::LinearSearch(int key) {
 
 int Array::BinarySearch(int key) {
 	int l = 0, mid, h = length - 1;
+	
 	while (l <= h) {
 		mid = (l + h) / 2;
 		if (key == A[mid])
@@ -118,6 +119,7 @@ int Array::BinarySearch(int key) {
 int Array::Get(int index) {
 	if (index >= 0 && index < length)
 		return A[index];
+		
 	return -1;
 }
 
@@ -128,6 +130,7 @@ void Array::Set(int index, int x) {
 
 int Array::Max() {
 	int max = A[0];
+	
 	for (int i = 1; i < length; i++) {
 		if (A[i] > max)
 			max = A[i];
@@ -137,6 +140,7 @@ int Array::Max() {
 
 int Array::Min() {
 	int min = A[0];
+	
 	for (int i = 1; i < length; i++) {
 		if (A[i] < min)
 			min = A[i];
@@ -146,8 +150,10 @@ int Array::Min() {
 
 int Array::Sum() {
 	int sum = 0;
+	
 	for (int i = 0; i < length; i++)
 		sum += A[i];
+		
 	return sum;
 }
 
@@ -157,10 +163,10 @@ float Array::Avg() {
 
 void Array::Reverse() {
 	int i, j;
-	int* B = new int[10];
-	for (i = length - 1, j = 0; i >= 0; i--, j++) {
+	int *B = new int[10];
+	
+	for (i = length - 1, j = 0; i >= 0; i--, j++)
 		B[j] = A[i];
-	}
 
 	for (int k = 0; k < length; k++)
 		A[k] = B[k];
@@ -168,6 +174,7 @@ void Array::Reverse() {
 
 void Array::Reverse2() {
 	int i, j;
+	
 	for (i = 0, j = length - 1; i < j; i++, j--)
 		swap(&A[i], &A[j]);
 }
@@ -175,7 +182,7 @@ void Array::Reverse2() {
 void Array::InsertSort(int x) {
 	if (length < size) {
 		int i = length - 1;
-		while (i>=0 && x < A[i]) {
+		while (i >= 0 && x < A[i]) {
 			A[i + 1] = A[i];
 			i--;
 		}
@@ -205,12 +212,14 @@ void Array::Rearrange() {
 Array* Array::Merge(Array arr2) {
 	int i = 0, j = 0, k = 0, m = length, n = arr2.length;
 	Array* arr3 = new Array(length + arr2.length);
+	
 	while (i < m && j < n) {
 		if (A[i] < arr2.A[j])
 			arr3->A[k++] = A[i++];
 		else
 			arr3->A[k++] = arr2.A[j++];
 	}
+	
 	for (; i < m; i++)
 		arr3->A[k++] = A[i];
 
@@ -221,10 +230,10 @@ Array* Array::Merge(Array arr2) {
 	return arr3;
 }
 
-
 Array* Array::Union(Array arr2) {
 	int i = 0, j = 0, k = 0, m = length, n = length;
 	Array* arr3 = new Array(length + arr2.length);
+	
 	while (i < m && j < n) {
 		if (A[i] < arr2.A[j])
 			arr3->A[k++] = A[i++];
@@ -232,9 +241,10 @@ Array* Array::Union(Array arr2) {
 		else if (A[i] == arr2.A[j]) {
 			arr3->A[k++] = A[i++];
 			j++;
-		} else
+		}
+		
+		else
 			arr3->A[k++] = arr2.A[j++];
-
 	}
 
 	for (; i < m; i++)
@@ -250,14 +260,15 @@ Array* Array::Union(Array arr2) {
 Array* Array::Intersection(Array arr2) {
 	int i = 0, j = 0, k = 0, m = length, n = arr2.length;
 	Array* arr3 = new Array(length + arr2.length);
+	
 	while (i < m && j < n) {
 		if (A[i] < arr2.A[j])
 			i++;
-
 		else if (A[i] == arr2.A[j]) {
 			arr3->A[k++] = A[i++];
 			j++;
-		} else
+		}
+		else
 			j++;
 	}
 
@@ -268,14 +279,14 @@ Array* Array::Intersection(Array arr2) {
 Array* Array::Difference(Array arr2) {
 	int i = 0, j = 0, k = 0, m = length, n = arr2.length;
 	Array* arr3 = new Array(length + arr2.length);
+	
 	while (i < m && j < n) {
 		if (A[i] < arr2.A[j])
 			arr3->A[k++] = A[i++];
-
 		else if (A[i] == arr2.A[j]) {
-			i++;
-			j++;
-		} else
+			i++; j++;
+		}
+		else
 			j++;
 	}
 
@@ -292,7 +303,7 @@ int main() {
 	int ch, sz;
 	int x, index;
 
-	cout << "Enter Size of Array";
+	cout << "Enter Size of Array: ";
 	cin >> sz;
 	arr1 = new Array(sz);
 
@@ -305,26 +316,26 @@ int main() {
 		cout << "5. Display\n";
 		cout << "6. Exit\n";
 
-		cout << "Enter your choice ";
+		cout << "Enter your choice: ";
 		cin >> ch;
 
 		switch (ch) {
 			case 1:
-				cout << "Enter an element and index" << endl;
+				cout << "Enter an element and index: ";
 				cin >> x >> index;
 				arr1->Insert(index, x);
 				break;
 			case 2:
-				cout << "Enter index";
+				cout << "Enter index: ";
 				cin >> index;
 				x = arr1->Delete(index);
-				cout << "Deleted Element is" << x << endl;
+				cout << "Deleted Element is " << x << endl;
 				break;
 			case 3:
-				cout << "Enter an element to search " << endl;
+				cout << "Enter an element to search: ";
 				cin >> x;
-				index = arr1->LinearSearch(x);
-				cout << "Element index " << index << endl;
+				index = arr1->ImprovedLinearSearch(x);
+				cout << "Element index: " << index << endl;
 				break;
 			case 4:
 				cout << "Sum is " << arr1->Sum() << endl;
