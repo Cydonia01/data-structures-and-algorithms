@@ -1,6 +1,8 @@
 #include <iostream>
-#include <stdlib.h>
+
 using namespace std;
+
+/* this file contains strings and some algorithms over them. */
 
 int length(char A[]) {
 	int i;
@@ -9,11 +11,9 @@ int length(char A[]) {
 }
 
 void reverse(char A[], char B[]) {
-	int i = length(A);
-	int j;
-	for (j = 0; j < length(A); j++) {
+	int i = length(A), j;
+	for (j = 0; j < length(A); j++)
 		B[j] = A[--i];
-	}
 	B[j] = '\0';
 }
 
@@ -29,12 +29,10 @@ int compare(char A[], char B[]) {
 
 void palindrome(char A[], char B[]) {
 	reverse(A, B);
-	if (compare(A, B)) {
-		cout<<"This word is palindrome.";
-	}
-	else {
-		cout<<"This word is not palindrome.";
-	}
+	if (compare(A, B))
+		cout<<"This word is a palindrome.";
+	else
+		cout<<"This word is not a palindrome.";
 }
 
 void palindrome2(char A[], char B[]) {
@@ -119,24 +117,24 @@ void permutation(char S[], int k) {
 			}
 		}
 	}
-	
 }
 
-void perm2(char S[], int l, int h) {
+void permutation2(char S[], int l, int h) {
 	int i;
 	if (l == h) printf(S);
 	else {
 		for (i=l; i <= h; i++) {
 			swap(S[l], S[i]);
-			perm2(S, l+1, h);
+			permutation2(S, l+1, h);
 			swap(S[l], S[i]);
 		} 
 	}
 }
 
 int main() {
-	char A[] = "ABC";
-	char B[] = "decimel";
-	perm2(A, 0, 3);
+	char A[] = "Hello";
+	char B[] = "Hannah";
+	cout<<"Length is "<<length(A);
+	palindrome(A, A);
 	return 0;
 }

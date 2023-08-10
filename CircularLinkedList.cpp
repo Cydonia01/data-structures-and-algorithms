@@ -1,5 +1,4 @@
 #include<iostream>
-#include<stdlib.h>
 
 using namespace std;
 
@@ -132,8 +131,6 @@ public:
 
 int main() {
 	CircularLinkedList cll(4);
-	cll.Delete(0);
-	cll.Display();
-	
+
 	return 0;
 }
