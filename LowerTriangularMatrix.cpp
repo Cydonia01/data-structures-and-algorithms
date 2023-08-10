@@ -21,11 +21,23 @@ public:
 		delete []A;
 	}
 	
+	void create();
 	void Set(int i, int j, int x);
 	int Get(int i, int j);
 	void Display();
 	int GetDimension(){return n;}
 };
+
+void LTMatrix::create() {
+	int x;
+	cout<<"Enter All Elements:"<<endl;
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= i; j++) {
+			cin>>x;
+			Set(i, j, x);
+		}
+	}
+}
 
 void LTMatrix::Set(int i, int j, int x) {
 	int index = i * (i - 1) / 2 + j - 1;
@@ -51,18 +63,10 @@ void LTMatrix::Display() {
 }
 
 int main() {
-	int d, x;
-	cout<<"Enter Dimensions: ";
-	cin>>d;
-	LTMatrix lm(d);
-	cout<<"Enter All Elements:"<<endl;
+	// indexes start with 1.
 	
-	for (int i = 1; i <= d; i++) {
-		for (int j = 1; j <= i; j++) {
-			cin>>x;
-			lm.Set(i, j, x);
-		}
-	}
+	LTMatrix lm(4);
+	lm.create();
 	lm.Display();
 	
 	return 0;

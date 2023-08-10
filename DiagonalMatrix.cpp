@@ -21,13 +21,28 @@ public:
 		delete []A;
 	}
 	
-	void Set(int i, int j, int x);
+	void create();
+	void Set(int i, int x);
 	int Get(int i, int j);
 	void Display();
 };
 
-void Diagonal::Set(int i, int j, int x) {
-	if (i == j) A[i - 1] = x;
+void Diagonal::create() {
+	int x;
+	cout<<"Enter diagonal values:"<<endl;
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; 
+		j <= n; j++) {
+			if (i == j) {
+				cin>>x;
+				Set(i, x);
+			}
+		}
+	}
+}
+
+void Diagonal::Set(int i, int x) {
+	A[i - 1] = x;
 }
 
 int Diagonal::Get(int i, int j) {
@@ -49,12 +64,9 @@ void Diagonal::Display() {
 int main() {
 	//indexes start with 1.
 	
-	Diagonal *d = new Diagonal(4);
-	d->Set(1,1,5);
-	d->Set(2,2,8);
-	d->Set(3,3,9);
-	d->Set(4,4,12);
-	d->Display();
+	Diagonal d(4);
+	d.create();
+	d.Display();
 	
 	return 0;
 }

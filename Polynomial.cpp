@@ -1,8 +1,9 @@
 #include<iostream>
-#include<stdlib.h>
 #include<math.h>
 
 using namespace std;
+
+/* This program implements Polynomial sum using 'operator' keyword. cf is coefficient and exp is exponential */
 
 class Term {
 public:
@@ -31,17 +32,16 @@ public:
 };
 
 istream & operator>>(istream &is, Polynomial &p) {
-	cout<<"Enter coefficient and exponentials: ";
-	int i;
-	for (i = 0; i < p.num; i++) {
+	cout<<"Enter coefficient and exponential: ";
+
+	for (int i = 0; i < p.num; i++)
 		cin>>p.terms[i].cf>>p.terms[i].exp;
-	}
+		
 	return is;
 }
 
 ostream & operator<<(ostream &os, Polynomial &p) {
-	int i;
-	for (i = 0; i < p.num; i++) {
+	for (int i = 0; i < p.num; i++) {
 		if (p.terms[i].cf != 1)
 			cout<<p.terms[i].cf;
 		if (p.terms[i].exp != 0)
@@ -94,7 +94,8 @@ int main() {
 	cout<<"Second polynomial: "<<p2<<endl;
 	
 	Polynomial p3 = p1+p2;
-	cout<<"Sum Polynomial: "<<p3;
+	cout<<"Sum Polynomial: "<<p3<<endl;
+	cout<<"If x = 3, then the answer is "<<p3.eval(3);
 	return 0;
 }
 

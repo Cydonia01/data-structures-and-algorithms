@@ -1,5 +1,4 @@
 #include<iostream>
-#include<stdlib.h>
 
 using namespace std;
 
@@ -10,31 +9,43 @@ private:
 public:
 	UTMatrix() {
 		n = 2;
-		A = new int[2*(2+1)/2];
+		A = new int[2 * (2 + 1) / 2];
 	}
 	
 	UTMatrix(int n) {
 		this->n = n;
-		A = new int[n*(n+1)/2];
+		A = new int[n * (n + 1) / 2];
 	}
 	
 	~UTMatrix() {
 		delete []A;
 	}
 	
+	void create();
 	void Set(int i, int j, int x);
 	int Get(int i, int j);
 	void Display();
 	int GetDimension(){return n;}
 };
 
+void UTMatrix::create() {
+	int x;
+	cout<<"Enter All Elements:"<<endl;
+	for (int i = 1; i <= n; i++) {
+		for (int j = i; j <= n; j++) {
+			cin>>x;
+			Set(i, j, x);
+		}
+	}
+}
+
 void UTMatrix::Set(int i, int j, int x) {
-	int index = i * (i - 1)/2 + j - 1;
+	int index = (i - 1) * n - (i - 2) * (i - 1) / 2 + j - i;
 	if (i <= j) A[index] = x;
 }
 
 int UTMatrix::Get(int i, int j) {
-	int index = i * (i - 1)/2 + j - 1;
+	int index = (i - 1) * n - (i - 2) * (i - 1) / 2 + j - i;
 	if (i <= j) return A[index];
 	else return 0;
 }
@@ -43,7 +54,7 @@ void UTMatrix::Display() {
 	int index,i,j;
 	for (i = 1; i <= n; i++) {
 		for (j = 1; j <= n; j++) {
-			index = i * (i - 1)/2 + j - 1;
+			index = (i - 1) * n - (i - 2) * (i - 1) / 2 + j - i;
 			if (i <= j) cout<<A[index]<<" ";
 			else cout<<"0 ";
 		}
@@ -52,20 +63,10 @@ void UTMatrix::Display() {
 }
 
 int main() {
-	int d;
-	cout<<"Enter Dimensions"<<endl;
-	cin>>d;
-	UTMatrix lm(d);
-	int x;
-	cout<<"Enter All Elements"<<endl;
-	
-	for (int i = 1; i <= d; i++) {
-		for (int j = 1; j <= d; j++) {
-			cin>>x;
-			lm.Set(i, j, x);
-		}
-	}
-	lm.Display();
+	// indexes start with 1.
+	UTMatrix um(4);
+	um.create();
+	um.Display();
 	
 	return 0;
 }
