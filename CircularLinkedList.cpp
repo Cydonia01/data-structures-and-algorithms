@@ -29,12 +29,14 @@ public:
 	}
 	
 	~CircularLinkedList() {
-		Node *p = head;
-		while (head) {
-			head = head->next;
+		Node *p = head->next;
+		Node *q;
+		while (p != head) {
+			q = p->next;
 			delete p;
-			p = head;
+			p = q;
 		}
+		delete head;
 	}
 	
 	void Display() {
@@ -42,9 +44,11 @@ public:
 		do {
 			cout<<p->data<<" ";
 			p = p->next;
-		} while (p != head);
+		} while (p != head && p->next);
 	}
-
+	
+	void RDisplay() {RDisplay(head);}
+	
 	void RDisplay(Node *p) {
 		static int flag = 0;
 		if (p != head || flag == 0) {
@@ -71,6 +75,7 @@ public:
 		if (index < 0 || index > length) return;
 		Node *t = new Node;
 		t->data = x;
+		t->next = 0;
 		Node *p;
 		if (index == 0) {
 			if (head == 0) {
@@ -130,7 +135,22 @@ public:
 };
 
 int main() {
-	CircularLinkedList cll(4);
-
+	// Sample:
+	CircularLinkedList cll;
+	cll.Insert(3, 0);
+	cll.Insert(4, 1);
+	cll.Insert(5, 0);
+	cll.Insert(7, 1);
+	cll.Insert(1, 2);
+	
+	cll.Display();
+	
+	cll.Delete(1);
+	cll.Delete(3);
+	
+	cout<<endl;
+	
+	cll.RDisplay();
+	
 	return 0;
 }
