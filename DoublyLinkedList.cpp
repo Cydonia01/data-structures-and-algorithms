@@ -4,14 +4,14 @@
 using namespace std;
 
 class Node {
-private:
+public:
 	Node* prev;
 	int data;
 	Node* next;	
 };
 
 class DoublyLinkedList {
-public:
+private:
 	int length;
 	Node* head;
 	Node* tail;
@@ -58,18 +58,28 @@ public:
 			cout<<p->data<<" ";
 			p = p->next;
 		}
+		cout<<endl;
 	}
 	
 	void Insert(int x, int index) {
-		if (index < 0 || index > length) return;
-		Node *t = new Node;
-		Node *p;
+		if (index < 0 || index > length)
+			return;
+			
+		Node *t, *p;
+		
+		t = new Node;
 		t->data = x;
+		t->next = t->prev = 0;
+		
 		if (index == 0) {
-			t->prev = 0;
-			t->next = head;
-			head->prev = t;
-			head = t;
+			if (head == 0) 
+				head = tail = t;
+			else {
+				t->prev = 0;
+				t->next = head;
+				head->prev = t;
+				head = t;
+			}
 		} 
 		else if (index == length) {
 			tail->next = t;
@@ -78,34 +88,45 @@ public:
 		}
 		else {
 			p = head;
-			for (int i = 0; i < index - 1; i++) {
+			for (int i = 0; i < index - 1; i++)
 				p = p->next;
-			}
+
 			t->next = p->next;
 			t->prev = p;
-			if (p->next) p->next->prev = t;
+			
+			if (p->next)
+				p->next->prev = t;
+				
 			p->next = t;
 		}
 		length++;
 	}
 	
 	int Delete(int index) {
-		if (index < 0 || index > length - 1) return -1;
+		if (index < 0 || index > length - 1)
+			return -1;
+			
 		int x;
 		Node *p;
+		
 		if (index == 0) {
 			p = head;
 			head = head->next;
 			x = p->data;
 			delete p;
-			if (head) head->prev = 0;
+			
+			if (head)
+				head->prev = 0;
 		} else {
 			p = head;
-			for (int i = 0; i < index; i++) {
+			for (int i = 0; i < index; i++)
 				p = p->next;
-			}
+
 			p->prev->next = p->next;
-			if (p->next) p->next->prev = p->prev;
+			
+			if (p->next)
+				p->next->prev = p->prev;
+				
 			x = p->data;
 			delete p;
 		}
@@ -122,13 +143,31 @@ public:
 			p->next = p->prev;
 			p->prev = temp;
 			p = p->prev;
-			if (p != 0 && p->next == 0) head = p;
+			if (p != 0 && p->next == 0)
+				head = p;
 		}
 	}
 };
 
 int main() {
-	DoublyLinkedList dll(4);
+	// Sample:
+	DoublyLinkedList dll;
+	dll.Insert(3, 0);
+	dll.Insert(6, 0);
+	dll.Insert(2, 1);
+	dll.Insert(8, 2);
+	dll.Insert(11, 3);
+	dll.Insert(5, 1);
 	
+	dll.Display();
+
+	dll.Delete(2);
+	dll.Delete(0);
+	
+	dll.Display();
+	
+	dll.Reverse();
+	
+	dll.Display();
 	return 0;
 }
