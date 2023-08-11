@@ -1,19 +1,30 @@
 #include<iostream>
 #include "TreeQueue.h"
-#include "Stack.h"
+#include "TreeStack.h"
 
 using namespace std;
 
 class Tree {
 private:
 	Node *root;
+	
+	// helper function for recursive destruction.
+	void destroy(Node* p) {
+		if (p) {
+			destroy(p->left);
+			destroy(p->right);
+			delete p;
+		}
+	}
+	
 public:
-	Tree() {root = NULL;}
+	Tree();
+	~Tree();
 	void CreateTree();
 	void ItPreorder();
 	void Preorder(){Preorder(root);}
 	void Preorder(Node *p);
-	void ItPostorder();
+	void ItPostorder(); // 'It' means iterative.
 	void Postorder() {Postorder(root);}
 	void Postorder(Node *p);
 	void ItInorder();
@@ -23,18 +34,32 @@ public:
 	void Levelorder(Node *p);
 	int Height(){return Height(root);}
 	int Height(Node *root);
-	int Count(){return Count(root)};
+	int Count(){return Count(root);};
 	int Count(Node *p);
-	int CountV2(){return CountV2(root)};
-	int CountV2(Node *p);
-	int sum(){return sum(root)};
+	int CountDeg1() {return CountDeg1(root);}
+	int CountDeg1(Node *p);
+	int CountDeg2() {return CountDeg2(root);}
+	int CountDeg2(Node *p);
+	int CountInternal(){return CountInternal(root);};
+	int CountInternal(Node *p);
+	int CountLeaf(){return CountLeaf(root);};
+	int CountLeaf(Node *p);
+	int sum(){return sum(root);};
 	int sum(Node *p);
 };
+
+Tree::Tree() {
+	root = NULL;
+}
+
+Tree::~Tree() {
+	destroy(root);
+}
 
 void Tree::CreateTree() {
 	Node *p, *t;
 	int x;
-	TreeQueue q(100);
+	TreeQueue q(20);
 	
 	cout<<"Enter root value: ";
 	cin>>x;
@@ -72,7 +97,7 @@ void Tree::CreateTree() {
 
 void Tree::ItPreorder() {
 	Node *t = root;
-	TreeStack st(10);
+	TreeStack st(20);
 	while (t != NULL || !st.isEmpty()) {
 		if (t != NULL) {
 			cout<<t->data<<" ";
@@ -143,7 +168,7 @@ void Tree::Postorder(Node *p) {
 }
 
 void Tree::Levelorder(Node *p) {
-	TreeQueue q(100);
+	TreeQueue q(20);
 	cout<<p->data<<" ";
 	q.enqueue(p);
 	
@@ -162,48 +187,91 @@ void Tree::Levelorder(Node *p) {
 
 int Tree::Height(Node *p) {
 	int x = 0, y = 0;
-	if (p == 0 || (p->left == 0 && p->right == 0)) return 0;
+	if (p == 0 || (p->left == 0 && p->right == 0))
+		return 0;
 	
 	x = Height(p->left);
 	y = Height(p->right);
-	if (x > y) return x + 1;
-	else return y + 1;
+	if (x > y)
+		return x + 1;
+	else
+		return y + 1;
 }
 
+// This method counts all nodes.
 int Tree::Count(Node *p) {
-	int x, y;
-	if (p != NULL) {
-		x = Count(p->left);
-		y = Count(p->right);
-		return x + y + 1;
-	}
-	return 0;
+	if (p == NULL)
+		return 0;
+	return Count(p->left) + Count(p->right) + 1;
 }
 
-int Tree::CountV2(Node *p) {
-	int x, y;
-	if (p != NULL) {
-		x = CountV2(p->left);
-		y = CountV2(p->right);
-		if (p->left && p->right)
-			return x + y + 1;
-		else
-			return x + y;
-	}
-	return 0;
+// This method counts degree 1 nodes. In other words, nodes which has 1 children.
+int Tree::CountDeg1(Node *p) {
+	if (p == NULL)
+		return 0;
+	if (p->left != NULL ^ p->right != NULL)
+		return CountDeg1(p->left) + CountDeg1(p->right) + 1;
+	return CountDeg1(p->left) + CountDeg1(p->right);
 }
 
+// This method counts degree 2 nodes. In other words, nodes which has 2 children.
+int Tree::CountDeg2(Node *p) {
+	if (p == NULL)
+		return 0;
+	if (p->left && p->right)
+		return CountDeg2(p->left) + CountDeg2(p->right) + 1;
+	return CountDeg2(p->left) + CountDeg2(p->right);
+}
+
+// This method counts internal nodes.
+int Tree::CountInternal(Node *p) {
+	if (p == NULL)
+		return 0;
+	if (p->left || p->right)
+		return CountInternal(p->left) + CountInternal(p->right) + 1;
+	return CountInternal(p->left) + CountInternal(p->right);
+}
+
+// This method counts leaf nodes.
+int Tree::CountLeaf(Node *p) {
+	if (p == NULL)
+		return 0;
+	if (!p->left && !p->right)
+		return CountLeaf(p->left) + CountLeaf(p->right) + 1;
+	return CountLeaf(p->left) + CountLeaf(p->right);
+}
+
+// This method evaluates the sum of data in all nodes.
 int Tree::sum(Node *p) {
-	int x, y;
-	if (p != NULL) {
-		x = sum(p->left);
-		y = sum(p->right);
-		return x + y + p->data;
-	}
-	return 0;
+	if (p == NULL)
+		return 0;
+	return sum(p->left) + sum(p->right) + p->data;
 }
 
 int main() {
+	// Sample: enter -1 to not add a child.
+	// Example input: 8 3 5 12 -1 10 6 -1 4 -1 -1 2 -1 9 7 -1 -1 -1 -1 -1 -1
+	Tree t;
+	t.CreateTree();
+	cout<<endl;
+	cout<<endl<<"Preorder travelsal of tree: ";
+	t.Preorder();
 	
+	cout<<endl<<"Inorder travelsal of tree: ";
+	t.Inorder();
+	
+	cout<<endl<<"Postorder travelsal of tree: ";
+	t.Postorder();
+	
+	cout<<endl<<"Levelorder travelsal of tree: ";
+	t.Levelorder();
+	
+	cout<<endl<<"Height of tree is "<<t.Height();
+	cout<<endl<<"Total nodes of tree is "<<t.Count();
+	cout<<endl<<"Degree 1 nodes of tree is "<<t.CountDeg1();
+	cout<<endl<<"Degree 2 nodes of tree is "<<t.CountDeg2();
+	cout<<endl<<"Internal nodes of tree is "<<t.CountInternal();
+	cout<<endl<<"Leaf nodes of tree is "<<t.CountLeaf();
+	cout<<endl<<"Sum of tree is "<<t.sum();
 	return 0;
 }
