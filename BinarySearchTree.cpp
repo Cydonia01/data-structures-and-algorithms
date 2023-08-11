@@ -4,6 +4,14 @@
 using namespace std;
 
 class BinarySearchTree {
+private:
+	void destroy(Node* p) {
+		if (p) {
+			destroy(p->left);
+			destroy(p->right);
+			delete p;
+		}
+	}
 public:
 	Node* root;
 	
@@ -15,12 +23,19 @@ public:
 		root->right = root->left = NULL;
 	}
 	
+	~BinarySearchTree() {
+		destroy(root);
+	}
+	
 	Node* Search(int x) {
 		Node *t = root;
 		while (t) {
-			if (x < t->data) t = t->left;
-			else if (x > t->data) t = t->right;
-			else return t;
+			if (x < t->data)
+				t = t->left;
+			else if (x > t->data)
+				t = t->right;
+			else
+				return t;
 		}
 		return NULL;
 	}
@@ -42,6 +57,7 @@ public:
 		Node *r = NULL;
 		Node *t = root;
 		Node *p;
+		
 		if (root == NULL) {
 			p = new Node;
 			p->data = x;
@@ -49,6 +65,7 @@ public:
 			root = p;
 			return;
 		}
+		
 		while (t != NULL) {
 			r = t;
 			if (x == t->data)
@@ -58,16 +75,21 @@ public:
 			else
 				t = t->right;
 		}
+		
 		p = new Node;
 		p->data = x;
 		p->left = p->right = NULL;
-		if (p->data < r->data) r->left = p;
-		else r->right = p;
+		if (p->data < r->data)
+			r->left = p;
+		else
+			r->right = p;
 	}
 	
+	// This is alternative insert method. There is no need to node pointer 'r';
 	void myInsert(int x) {
 		Node *t = root;
 		Node *p;
+		
 		if (root == NULL) {
 			p = new Node;
 			p->data = x;
@@ -75,21 +97,28 @@ public:
 			root = p;
 			return;
 		}
+		
 		while(t != NULL) {
 			if (x < t->data && t->left)
 				t = t->left;
 			else if (x > t->data && t->right)
 				t = t->right;
-			else if (x == t->data) return;
-			else break;
+			else if (x == t->data)
+				return;
+			else
+				break;
 		}
+		
 		p = new Node;
 		p->data = x;
 		p->left = p->right = NULL;
-		if (p->data < t->data) t->left = p;
-		else t->right = p;
+		if (p->data < t->data)
+			t->left = p;
+		else
+			t->right = p;
 	}
 	
+	// Recursive insert function.
 	Node* RInsert(int x) {return RInsert(root, x);}
 	
 	Node* RInsert(Node *p, int x) {
@@ -117,6 +146,7 @@ public:
 		}
 	}
 	
+	// Helper functions for Delete function.
 	int Height(){return Height(root);}
 	
 	int Height(Node *p) {
@@ -127,12 +157,14 @@ public:
 		return x > y ? x + 1: y + 1;
 	}
 	
+	// Inorder predecessor of a node.
 	Node* InPre(Node *p) {
 		while (p && p->right != NULL)
 			p = p->right;
 		return p;
 	}
 	
+	// Inorder successor of a node.
 	Node* InSucc(Node *p) {
 		while (p && p->left != NULL)
 			p = p->left;
@@ -175,38 +207,73 @@ public:
 	}
 };
 
-BinarySearchTree CreatePre(int pre[], int n) {
-		TreeStack st(10);
-		BinarySearchTree bst2(pre[0]);
-		Node* t;
-		int a, i = 1;
-		Node *p = bst2.root;
-		while (i < n) {
-			if (pre[i] < p->data) {
+// This function creates a binary search tree from its preorder traversal.
+BinarySearchTree CreatePre(int pre[], int size) {
+	TreeStack st(10);
+	BinarySearchTree bst(pre[0]);
+	Node* t;
+	int a, i = 1;
+	Node *p = bst.root;
+	while (i < size) {
+		if (pre[i] < p->data) {
+			t = new Node;
+			t->data = pre[i++];
+			t->right = t->left = NULL;
+			p->left = t;
+			st.push(p);
+			p = t;
+		}
+		else {
+			a = st.StackTop() ? st.StackTop()->data:INT_MAX;
+			
+			if (pre[i] > p->data && pre[i] < a) {
 				t = new Node;
 				t->data = pre[i++];
 				t->right = t->left = NULL;
-				p->left = t;
-				st.push(p);
+				p->right = t;
 				p = t;
 			}
-			else {
-				a = st.StackTop() ? st.StackTop()->data:INT_MAX;
-				
-				if (pre[i] > p->data && pre[i] < a) {
-					t = new Node;
-					t->data = pre[i++];
-					t->right = t->left = NULL;
-					p->right = t;
-					p = t;
-				}
-				else p = st.pop();
-			}
+			
+			else
+				p = st.pop();
 		}
-		return bst2;
 	}
+	return bst;
+}
 
 int main() {
+	// Sample:
+	BinarySearchTree bst;
+	bst.Insert(15);
+	bst.Insert(10);
+	bst.Insert(20);
+	bst.Insert(8);
+	bst.Insert(12);
+	bst.Insert(18);
+	bst.Insert(22);
+	
+	bst.Inorder();
+	
+	cout<<endl<<"After deleting a leaf: ";
+	bst.Delete(18);
+	bst.Inorder();
+	
+	cout<<endl<<"After deleting an internal node: ";
+	bst.Delete(10);
+	bst.Inorder();
+	
+	cout<<endl<<"After deleting the root: ";
+	bst.Delete(15);
+	bst.Inorder();
+	
+	cout<<endl<<endl;
+	
+	// Sample 2:
+	int Pre[8] = {30, 20, 10, 15, 25, 40, 50, 45};
+	BinarySearchTree bst2 = CreatePre(Pre, sizeof(Pre) / sizeof(int));
+	
+	cout<<"Created tree from its preorder traversal: ";
+	bst2.Inorder();
 	
 	return 0;
 }
