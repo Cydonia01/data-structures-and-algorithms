@@ -29,6 +29,8 @@ public:
 	}
 	
 	~CircularLinkedList() {
+		if (!head)
+			return;
 		Node *p = head->next;
 		Node *q;
 		while (p != head) {
