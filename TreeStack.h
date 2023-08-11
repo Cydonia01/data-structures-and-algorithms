@@ -1,7 +1,10 @@
 #include<iostream>
 #include "TreeQueue.h"
-#ifndef Stack_h
-#define Stack_h
+#ifndef TreeStack_h
+#define TreeStack_h
+
+/* This file is Stack data structure adapted to the trees. For example, stack contains Node pointers
+instead of int. Node class is in TreeQueue.h header file. */
 
 using namespace std;
 
@@ -22,13 +25,14 @@ public:
 	}
 	
 	void push(Node* x) {
-		if (top == size - 1) cout<<"Stack Overflow";
+		if (isFull())
+			cout<<"Stack Overflow";
 		else A[++top] = x;
 	}
 	
 	Node* pop() {
 		Node *x = NULL;
-		if (top == -1) {
+		if (isEmpty()) {
 			cout<<"Stack Underflow ";
 			return x;
 		}
@@ -50,10 +54,10 @@ public:
 	}
 	
 	Node* StackTop() {
-		if (top == -1) return NULL;
+		if (top == -1)
+			return NULL;
 		return A[top];
 	}
-	
 	
 	int isEmpty() {
 		return (top == -1);
@@ -68,6 +72,5 @@ public:
 			cout<<A[i]<<" ";
 	}
 };
-
 
 #endif

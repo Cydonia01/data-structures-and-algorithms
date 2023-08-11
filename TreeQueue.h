@@ -1,6 +1,9 @@
 #include<iostream>
-#ifndef Queue_h
-#define Queue_h
+#ifndef TreeQueue_h
+#define TreeQueue_h
+
+/* This file is Queue data structure adapted to the trees. Node class contains left and right pointers
+instead of just next. Also, main array contains Node pointers instead of int. */
 
 using namespace std;
 
@@ -31,7 +34,8 @@ public:
 	}
 
 	void enqueue(Node* p) {
-		if (isFull()) cout<<"Queue is full.";
+		if (isFull())
+			cout<<"Queue is full.";
 		else {
 			rear = (rear + 1) % size;
 			A[rear] = p;
@@ -40,11 +44,11 @@ public:
 	
 	Node* dequeue() {
 		Node* p = NULL;
-		if (isEmpty()) cout<<"Queue is empty.\n";
+		if (isEmpty())
+			cout<<"Queue is empty.\n";
 		else {
 			front = (front + 1) % size;
 			p = A[front];
-			
 		}
 		return p;
 	}
@@ -55,7 +59,6 @@ public:
 	
 	int isFull() {
 		return (rear + 1) % size == front;
-		
 	}
 };
 
