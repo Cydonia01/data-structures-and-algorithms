@@ -20,8 +20,9 @@ public:
 	~LinkedList();
 	
 	void Display();
-	void append(int x);
 	void ReverseDisplay(Node *p);
+	void ReverseDisplay2();
+	void append(int x);
 	int getLength();
 	Node* getHead();
 	Node* getTail();
@@ -38,10 +39,8 @@ public:
 	void reverseData();
 	void reverseLinks();
 	void RReverseLinks(Node *p, Node *q);
-	void Concatenate(LinkedList ll2);
-	void Merge(LinkedList ll2);
+	void Merge(LinkedList &ll2);
 	int isLoop();
-	void ReverseDisplay2();
 };
 
 LinkedList::LinkedList() {
@@ -121,9 +120,8 @@ int LinkedList::max() {
 	Node *p = head;
 	int max = INT_MIN;
 	while(p != 0) {
-		if (p->data > max) {
+		if (p->data > max)
 			max = p->data;
-		}
 		p = p->next;
 	}
 	return max;
@@ -131,16 +129,22 @@ int LinkedList::max() {
 
 int LinkedList::RMax(Node *p) {
 	int x = 0;
-	if (p == 0) return INT_MIN;
+	if (p == 0)
+		return INT_MIN;
+	
 	x = RMax(p->next);
-	if (x > p->data) return x;
-	else return p->data;
+	
+	if (x > p->data)
+		return x;
+	else
+		return p->data;
 }
 
 Node* LinkedList::search(int key) {
 	Node *p = head;
 	while (p != 0) {
-		if (key == p->data) return p;
+		if (key == p->data)
+			return p;
 
 		p = p->next;
 	}
@@ -192,7 +196,8 @@ void LinkedList::InsertSorted(int x) {
 	t->next = 0;
 	p = head;
 	
-	if (head == 0) head = t;
+	if (head == 0)
+		head = t;
 	
 	else {
 		while (p && p->data < x) {
@@ -214,7 +219,8 @@ void LinkedList::InsertSorted(int x) {
 int LinkedList::Delete(int index) {
 	Node *p, *q;
 	p = head;
-	if (index < 0 || index > length - 1) return -1;
+	if (index < 0 || index > length - 1)
+		return -1;
 	
 	if (index == 0)
 		head = head->next;
@@ -234,9 +240,8 @@ int LinkedList::Delete(int index) {
 int LinkedList::isSorted() {
 	Node *p = head;
 	while (p->next != 0) {
-		if (p->data > p->next->data) {
+		if (p->data > p->next->data)
 			return false;
-		}
 		p = p->next;
 	}
 	return true;
@@ -297,12 +302,7 @@ void LinkedList::RReverseLinks(Node *p, Node *q) {
 		head = q;
 }
 
-void LinkedList::Concatenate(LinkedList ll2) {
-	tail->next = ll2.getHead();
-	length += ll2.getLength();
-}
-
-void LinkedList::Merge(LinkedList ll2) {
+void LinkedList::Merge(LinkedList &ll2) {
 	Node *first, *second, *third, *last;
 	first = head;
 	second = ll2.head;
@@ -382,7 +382,6 @@ int getMiddleV2(LinkedList list) {
 }
 
 int main() {
-	
 	return 0;
 }
 
