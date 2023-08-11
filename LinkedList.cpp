@@ -1,5 +1,4 @@
 #include<iostream>
-#include<stdlib.h>
 
 using namespace std;
 
@@ -39,7 +38,7 @@ public:
 	void reverseData();
 	void reverseLinks();
 	void RReverseLinks(Node *p, Node *q);
-	void Merge(LinkedList &ll2);
+	void Merge(LinkedList* ll2);
 	int isLoop();
 };
 
@@ -84,6 +83,7 @@ void LinkedList::Display() {
 		cout<<p->data<<" ";
 		p = p->next;
 	}
+	cout<<endl;
 }
 
 void LinkedList::ReverseDisplay(Node *p) {
@@ -302,10 +302,10 @@ void LinkedList::RReverseLinks(Node *p, Node *q) {
 		head = q;
 }
 
-void LinkedList::Merge(LinkedList &ll2) {
+void LinkedList::Merge(LinkedList* ll2) {
 	Node *first, *second, *third, *last;
 	first = head;
-	second = ll2.head;
+	second = ll2->getHead();
 	third = 0;
 	last = 0;
 	if (first->data < second->data) {
@@ -334,7 +334,7 @@ void LinkedList::Merge(LinkedList &ll2) {
 	if (first != 0) last->next = first;
 	else last->next = second;
 	head = third;
-	length += ll2.getLength();
+	length += ll2->getLength();
 }
 
 int LinkedList::isLoop()  {
@@ -382,6 +382,39 @@ int getMiddleV2(LinkedList list) {
 }
 
 int main() {
+	// Sample 1:
+	LinkedList list;
+	list.append(4);
+	list.append(7);
+	list.append(5);
+	
+	list.Insert(6, 1);
+	list.Insert(3, 0);
+	list.Insert(8, 2);
+	
+	list.Display();
+	list.ReverseDisplay(list.getHead());
+	cout<<endl;
+	list.Delete(1);
+	list.Delete(0);
+	
+	list.Display();
+	
+	cout<<"sum is "<<list.sum()<<endl<<"max is "<<list.max()<<endl<<endl;
+	
+	// Sample 2: Merging Lists. Lists should be sorted within themselves.
+	
+	LinkedList *ll = new LinkedList;
+	LinkedList *ll2 = new LinkedList;
+	ll->append(2);
+	ll->append(4);
+	ll->append(7);
+	ll2->append(5);
+	ll2->append(6);
+	ll2->append(9);
+	ll->Merge(ll2);
+	ll->Display();
+	
 	return 0;
 }
 
