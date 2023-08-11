@@ -32,12 +32,16 @@ public:
 	}
 	
 	~CircularDoublyLinkedList() {
-		Node *p = head;
-		while (head) {
-			head = head->next;
+		if (!head)
+			return;
+		Node *p = head->next;
+		Node *q;
+		while (p != head) {
+			q = p->next;
 			delete p;
-			p = head;
+			p = q;
 		}
+		delete head;
 	}
 	
 	Node* getHead() {
@@ -58,6 +62,7 @@ public:
 			cout<<p->data<<" ";
 			p = p->next;
 		} while (p != head);
+		cout<<endl;
 	}
 	
 	void Insert(int x, int index) {
@@ -125,7 +130,21 @@ public:
 };
 
 int main() {
-	CircularDoublyLinkedList cll;
-
+	// Sample:
+	CircularDoublyLinkedList cdll;
+	cdll.Insert(3, 0);
+	cdll.Insert(7, 1);
+	cdll.Insert(2, 0);
+	cdll.Insert(11, 3);
+	cdll.Insert(42, 2);
+	cdll.Insert(21, 2);
+	cdll.Insert(1, 1);
+	
+	cdll.Display();
+	
+	cdll.Delete(4);
+	cdll.Delete(1);
+	
+	cdll.Display();
 	return 0;
 }
