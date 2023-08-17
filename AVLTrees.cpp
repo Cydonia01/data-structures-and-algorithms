@@ -1,14 +1,9 @@
 #include<iostream>
+#include "AVLQueue.h"
 
 using namespace std;
 
-class Node {
-public:
-	Node *lchild;
-	int data;
-	int height;
-	Node *rchild;
-};
+/* Node class in in AVLQueue.h header file. */
 
 class AVLTree {
 public:
@@ -24,9 +19,14 @@ public:
 		root->height = 1;
 		root->lchild = root->rchild = NULL;
 	}
-	
+
+	// Helper methods for Rotations.
 	int NodeHeight(Node *p) {
 		int hl, hr;
+		
+		if (p == NULL)
+			return 0;
+		
 		hl = p && p->lchild?p->lchild->height:0;
 		hr = p && p->rchild?p->rchild->height:0;
 		
@@ -35,10 +35,45 @@ public:
 	
 	int BalanceFactor(Node *p) {
 		int hl, hr;
+		
 		hl = p && p->lchild?p->lchild->height:0;
 		hr = p && p->rchild?p->rchild->height:0;
 		
 		return hl - hr;
+	}
+	
+	// Inorder predecessor of a node.
+	Node* InPre(Node *p) {
+		while (p && p->rchild)
+			p = p->rchild;
+		return p;
+	}
+	
+	// Inorder successor of a node.
+	Node* InSucc(Node *p) {
+		while (p && p->lchild)
+			p = p->lchild;
+		return p;
+	}
+	
+	void Levelorder() {Levelorder(root);}
+	
+	void Levelorder(Node *p) {
+		AVLQueue q(20);
+		cout<<p->data<<" ";
+		q.enqueue(p);
+		
+		while (!q.isEmpty()) {
+			p = q.dequeue();
+			if (p->lchild) {
+				cout<<p->lchild->data<<" ";
+				q.enqueue(p->lchild);
+			}
+			if (p->rchild) {
+				cout<<p->rchild->data<<" ";
+				q.enqueue(p->rchild);
+			}
+		}
 	}
 	
 	Node *LLRotation(Node *p) {
@@ -47,6 +82,7 @@ public:
 		
 		pl->rchild = p;
 		p->lchild = plr;
+		
 		p->height = NodeHeight(p);
 		pl->height = NodeHeight(pl);
 		
@@ -65,6 +101,7 @@ public:
 		
 		plr->lchild = pl;
 		plr->rchild = p;
+		
 		pl->height = NodeHeight(pl);
 		p->height = NodeHeight(p);
 		plr->height = NodeHeight(plr);
@@ -81,6 +118,7 @@ public:
 		
 		pr->lchild = p;
 		p->rchild = prl;
+		
 		p->height = NodeHeight(p);
 		pr->height = NodeHeight(pr);
 		
@@ -99,6 +137,7 @@ public:
 		
 		prl->lchild = p;
 		prl->rchild = pr;
+		
 		pr->height = NodeHeight(pr);
 		p->height = NodeHeight(p);
 		prl->height = NodeHeight(prl);
@@ -111,6 +150,7 @@ public:
 	
 	Node *RInsert(int key) {return RInsert(root, key);}
 	
+	// This function recursively inserts an item and makes necessary rotations.
 	Node *RInsert(Node *p, int key) {
 		Node *t = NULL;
 		
@@ -122,25 +162,36 @@ public:
 			return t;
 		}
 		
-		if (key < p->data) p->lchild = RInsert(p->lchild, key);
-		else if (key > p->data) p->rchild = RInsert(p->rchild, key);
+		if (key < p->data)
+			p->lchild = RInsert(p->lchild, key);
+			
+		else if (key > p->data)
+			p->rchild = RInsert(p->rchild, key);
+		
 		p->height = NodeHeight(p);
 		
-		if (BalanceFactor(p) == 2 && BalanceFactor(p->lchild) == 1)
+		int balance = BalanceFactor(p);
+		
+		if (balance == 2 && BalanceFactor(p->lchild) == 1)
 			return LLRotation(p);
-		else if (BalanceFactor(p) == 2 && BalanceFactor(p->lchild) == -1)
+			
+		if (balance == 2 && BalanceFactor(p->lchild) == -1)
 			return LRRotation(p);
-		else if (BalanceFactor(p) == -2 && BalanceFactor(p->rchild) == -1)
+			
+		if (balance == -2 && BalanceFactor(p->rchild) == -1)
 			return RRRotation(p);
-		else if (BalanceFactor(p) == -2 && BalanceFactor(p->rchild) == 1)
+			
+		if (balance == -2 && BalanceFactor(p->rchild) == 1)
 			return RLRotation(p);
 		
 		return p;
 	}
-
-	Node *Delete(Node *p, int x) {
+	
+	Node *Delete(int key) {return Delete(root, key);}
+	
+	// This functions deletes an item and makes necessary rotations.
+	Node *Delete(Node *p, int key) {
 		Node* q;
-		p->height = NodeHeight(p);
 		
 		if (p == NULL)
 			return NULL;
@@ -152,35 +203,71 @@ public:
 			return NULL;
 		}
 		
-		if (x < p->data)
-			Delete(p->lchild, x);
-		else if (x > p->data)
-			Delete(p->rchild, x);
+		if (key < p->data)
+			p->lchild = Delete(p->lchild, key);
 			
-		if (BalanceFactor(p) == 2 && BalanceFactor(p->lchild) == 1)
+		else if (key > p->data)
+			p->rchild = Delete(p->rchild, key);
+			
+		else {
+			if (NodeHeight(p->lchild) > NodeHeight(p->rchild)) {
+				q = InPre(p->lchild);
+				p->data = q->data;
+				p->lchild = Delete(p->lchild, q->data);
+			}
+			
+			else {
+				q = InSucc(p->rchild);
+				p->data = q->data;
+				p->rchild = Delete(p->rchild, q->data);
+			}	
+		}
+		
+		p->height = NodeHeight(p);
+		
+		int balance = BalanceFactor(p);
+		
+		if (balance == 2 && BalanceFactor(p->lchild) >= 0)
 			return LLRotation(p);
-		else if (BalanceFactor(p) == 2 && BalanceFactor(p->lchild) == -1)
+		
+		if (balance == 2 && BalanceFactor(p->lchild) < 0)
 			return LRRotation(p);
-		else if (BalanceFactor(p) == -2 && BalanceFactor(p->rchild) == -1)
+		
+		if (balance == -2 && BalanceFactor(p->rchild) <= 0)
 			return RRRotation(p);
-		else if (BalanceFactor(p) == -2 && BalanceFactor(p->rchild) == 1)
+		
+		if (balance == -2 && BalanceFactor(p->rchild) > 0)
 			return RLRotation(p);
-		else if (BalanceFactor(p) == 2 && BalanceFactor(p->lchild) == 0)
-			return LLRotation(p);
-		else if (BalanceFactor(p) == -2 && BalanceFactor(p->rchild) == 0)
-			return RRRotation(p);
+			
+		return p;
 	}
 };
 
 int main() {
+	// to make it simple, height of the root is 1.
 	AVLTree avlt;
 	
 	avlt.root = avlt.RInsert(30);
 	avlt.RInsert(40);
 	avlt.RInsert(10);
-	avlt.RInsert(5);
 	avlt.RInsert(20);
-	cout<<avlt.Delete(avlt.root, 40)->data;
-	return 0;
+	avlt.RInsert(5);
+	avlt.RInsert(35);
+	avlt.RInsert(2);
 	
+	cout<<"First Tree:"<<endl;
+	avlt.Levelorder();
+	
+	avlt.Delete(20);
+	cout<<endl<<endl<<"After Deleting 20:"<<endl;
+	avlt.Levelorder();
+	
+	avlt.Delete(35);
+	cout<<endl<<endl<<"After Deleting 35:"<<endl;
+	avlt.Levelorder();
+	
+	avlt.Delete(40);
+	cout<<endl<<endl<<"After Deleting 40:"<<endl;
+	avlt.Levelorder();
+	return 0;
 }
