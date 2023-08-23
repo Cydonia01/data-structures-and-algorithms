@@ -94,12 +94,14 @@ void QuickSort(int A[], int l, int h) {
 }
 
 // helper method for merge sort.
-int* Merge(int A[], int l, int mid, int h) {
+void Merge(int A[], int l, int mid, int h) {
 	int B[h + 1];
 	int i, j, k;
+	
 	i = l;
 	j = mid + 1;
 	k = l;
+	
 	while (i <= mid && j <= h) {
 		if (A[i] < A[j])
 			B[k++] = A[i++];
@@ -159,8 +161,8 @@ int findMax(int A[], int size) {
 void CountSort(int A[], int size) {
 	int max, i, j, *C;
 	max = findMax(A, size);
-	C = new int[max + 1];
 	
+	C = new int[max + 1];
 	
 	for (i = 0; i < max + 1; i++)
 		C[i] = 0;
@@ -238,13 +240,17 @@ void RadixSort(int A[], int size) {
 	int max, i, j, div, index;
 	Node* *Bins;
 	max = findMax(A, size);
+	
 	Bins = new Node*[10];
+	
 	for (i = 0; i < 10; i++)
 		Bins[i] = NULL;
 	
 	div = 1;
+	
 	while (div <= max) {
 		j = 0;
+		
 		for (i = 0; i < size; i++) {
 			index = (A[i] / div) % 10;
 			Insert(Bins[index], A[i]);
@@ -313,7 +319,7 @@ int main() {
 	cout<<"Count Sort: ";
 	Display(G, sizeof(G) / sizeof(int));
 	
-	int H[] = {7, 1, 4, 2, 5, 8, 3, 6, 13, 11};
+	int H[] = {7, 1, 4, 4, 5, 8, 4, 6, 13, 11};
 	BucketSort(H, sizeof(H) / sizeof(int));
 	cout<<"Bucket Sort: ";
 	Display(H, sizeof(H) / sizeof(int));
