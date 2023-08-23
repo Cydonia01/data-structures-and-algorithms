@@ -1,5 +1,7 @@
 #include<iostream>
 
+/* This program is Queue using linked list. */
+
 using namespace std;
 
 class Node {
@@ -8,6 +10,7 @@ public:
 	Node *next;
 };
 
+// 'f' and 'r' are 'front' and 'rear'.
 class QueueLinkedList {
 private:
 	int length;
@@ -38,22 +41,31 @@ public:
 	
 	void enqueue(int x) {
 		Node *t = new Node;
-		if (t == NULL) cout<<"Queue is Full.\n";
+		
+		if (t == NULL)
+			cout<<"Queue is Full.\n";
+			
 		else {
 			t->data = x;
 			t->next = NULL;
-			if (f == NULL) f = r = t;
-			else {
+			
+			if (f == NULL) 
+				f = t;
+				
+			else
 				r->next = t;
-				r = t;
-			}
+			
+			r = t;
 		}
 	}
 	
 	int dequeue() {
-		int x = -1;
 		Node *p;
-		if (f == NULL) cout<<"Queue is empty.\n";
+		int x = -1;
+		
+		if (isEmpty())
+			cout<<"Queue is empty.\n";
+			
 		else {
 			p = f;
 			f = f->next;
@@ -72,16 +84,30 @@ public:
 		return (t == NULL);
 	}
 	
-	int first() {
+	int front() {
 		return f->data;
 	}
 	
-	int last() {
+	int rear() {
 		return r->data;
 	}
 };
 
 int main() {
+	// Sample:
+	QueueLinkedList q;
+	q.enqueue(3);
+	q.enqueue(6);
+	q.enqueue(2);
+	q.enqueue(5);
 	
+	q.Display();
+	
+	cout<<"Deleted element is "<<q.dequeue()<<endl;
+	
+	q.Display();
+	
+	cout<<"Front element is "<<q.front()<<endl;
+	cout<<"Rear element is "<<q.rear()<<endl;
 	return 0;
 }
