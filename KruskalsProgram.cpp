@@ -50,7 +50,8 @@ int find(int u) {
 int main() {
 	// e is number of edges. n is number of vertices.
 	int i, j, k, n = 7, e = 9, u, v, min;
-	for (i = 0; i < n - 1; i++) {
+	i = 0;
+	while (i < n - 1) {
 		min = I;
 		for (j = 0; j < e; j++) {
 			if (edges[2][j] < min && included[j] == 0) {
@@ -65,10 +66,13 @@ int main() {
 			t[0][i] = u;
 			t[1][i] = v;
 			Union(find(u), find(v));
+			i++;
 		}
 		
 		included[k] = 1;
 	}
+	
+	cout<<"Edges of spanning tree: "<<endl;
 	
 	for (i = 0; i < n - 1; i++)
 		cout<<t[0][i]<<" "<<t[1][i]<<endl;
