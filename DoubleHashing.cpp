@@ -38,6 +38,23 @@ public:
 		}
 	}
 	
+	int findMaxPrime() {
+		bool check;
+		int i = size - 1;
+		
+		while (i > 0) {
+			check = true;
+			for (int j = 2; j < i / 2; j++) {
+				if (i % j == 0) {
+					check = false;
+					break;
+				}
+			}
+			if (check) return i;
+			i--;
+		}
+	}
+	
 	int hashing(int key, int i) {
 		return (hash1(key) + i * hash2(key)) % size;
 	}
@@ -48,23 +65,6 @@ public:
 	
 	int hash2(int key) {
 		return maxPrime - (key % maxPrime);
-	}
-	
-	int findMaxPrime() {
-		bool check = true;
-		int i = size - 1;
-		int j;
-		while (i > 0) {
-			check = true;
-			for (j = 2; j < i / 2; j++) {
-				if (i % j == 0) {
-					check = false;
-					break;
-				}
-			}
-			if (check) return i;
-			i--;
-		}
 	}
 	
 	void Insert(int key) {
@@ -79,10 +79,13 @@ public:
 	}
 	
 	int Search(int key) {
-		int index = hashing(key, 0);
+		int i = 0;
+		int index = hashing(key, i);
+		
 		while(isFull(index)) {
 			if (key == HT[index++])
 				return 1;
+			index = hashing(key, ++i);
 		}
 		return 0;
 	}
