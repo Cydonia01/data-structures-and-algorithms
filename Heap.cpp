@@ -2,22 +2,11 @@
 
 using namespace std;
 
-class Node {
-public:
-	Node* lchild;
-	int data;
-	Node* rchild;
-};
-
 class Heap {
 public:
 	int *A;
 	int length;
 	int size;
-	
-	Heap() {
-		
-	}
 	
 	Heap(int size) {
 		this->size = size + 1;
@@ -72,39 +61,71 @@ public:
 		length--;
 		return first;
 	}
-	
-	void Heapify() {
-		int i, j, temp;
-		i = (size - 1) / 2;
-		j = 2 * i;
-		for (i; i > 0; i++) {
-			while (i != 0) {
-				if (A[j + 1] > A[j])
-					j = j + 1;
-				if (A[i] < A[j]) {
-					temp = A[i];
-					A[i] = A[j];
-					A[j] = temp;
-					i
-				}
-			}
-			
-		}
-	}
-	
 };
 
+void Heapify(int A[], int size) {
+	int i, j, temp;
+	for (i = size / 2; i > 0; i--) {
+		j = i;
+		while (j <= size / 2) {
+			if (A[2 * j] > A[2 * j + 1] && A[2 * j] > A[j]) {
+				temp = A[i];
+				A[j] = A[2 * j];
+				A[2 * j] = temp;
+				j = 2 * j;
+			}
+			
+			else if (A[2 * j + 1] > A[j]){
+				temp = A[j];
+				A[j] = A[2 * j + 1];
+				A[2 * j + 1] = temp;
+				j = 2 * j + 1;
+			}
+		}
+	}
+}
+
 int main() {
-	int A[] = {0, 10, 20, 30, 25, 5, 40, 35};
-	Heap h(A, 7);
+	// index starts from 1. 0th index is placeholder. All of them is max heap and same array.
 	
-	for (int i = 1; i < h.size; i++)
-		cout<<"Deleted element is "<<h.Delete()<<endl;
+	int A[] = {0, 10, 20, 15, 12, 40, 25, 18};
+	int size = 7, i;
 	
-	cout<<"Sorted heap is ";
-
-	for (int i = 1; i < h.size; i++)
-		cout<<h.A[i]<<" ";
-
+	// Sample 1: Insertion manually.
+	Heap h1(size);
+	
+	h1.Insert(10);h1.Insert(20);h1.Insert(15);h1.Insert(12);
+	h1.Insert(40);h1.Insert(25);h1.Insert(18);
+	
+	cout<<"Max Heap: ";
+	
+	for (i = 1; i < h1.size; i++)
+		cout<<h1.A[i]<<" ";
+	
+	cout<<endl<<endl<<endl;
+	
+	// Sample 2: Insertion Automatically, Deletion & Heap Sort.
+	Heap h2(A, size);
+	
+	for (i = 1; i < h2.size; i++)
+		cout<<"Deleted element: "<<h2.Delete()<<endl;
+	
+	cout<<endl<<"Sorted heap: ";
+	
+	for (i = 1; i < h1.size; i++)
+		cout<<h2.A[i]<<" ";
+	
+	cout<<endl<<endl;
+	
+	// Sample 3: Heapify.
+	Heapify(A, size);
+	
+	cout<<"Heap created via Heapify: ";
+	
+	for (i = 1; i < size + 1; i++)
+		cout<<A[i]<<" ";
+	
+	cout<<endl;
+	
 	return 0;
 }
